@@ -1,4 +1,47 @@
 #!/usr/bin/env python
-import researchgraph.settings
+import researchgraph.settings as settings
+import researchgraph.database as database
+
+from py2neo import neo4j
+graph_db = neo4j.GraphDatabaseService("http://localhost:7474/db/data/")
+
+def createAbstractPerson(p):
+    node = neo4j.Node.abstract()
+    node.add_labels("Somebody")
+    for propname in ['first', 'middle', 'prelast', 'last', 'lineage']:
+        if len(p.get_part(propname)) != 0:
+            node[propname] = p.get_part_as_text(propname)
+    return node
+
+def handleEntry(bib_id, entry, db):
+    print("ID:", bib_id)
+    print(entry)
+
+
+
+def handleFile(fn, db):
+    from pybtex.database.input import bibtex
+    parser = bibtex.Parser()
+    bibdata = parser.parse_file(fn)
+
+    #loop through the individual references
+    for bib_id in bibdata.entries:
+        handleEntry(bib_id, bibdata.entries[bib_id], db)
+        #print(b.type)
+        #for person in b.persons:
+        #
+
+
+import argparse
+
+parser = argparse.ArgumentParser(description='Import one or more BibTeX files into the research graph.')
+parser.add_argument("bibtex", help="BibTeX input file", nargs='+')
+settings.add_arguments(parser)
+args = parser.parse_args()
+
+db = database.connect(args)
+for fn in args.bibtex:
+    print(fn)
+    handleFile(fn, db)
 
 
