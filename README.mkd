@@ -1,0 +1,33 @@
+Research Graph
+==============
+
+(This is a working name until I come up with a better one.)
+
+Your bibliography data forms a graph. Let's actually store and model it
+as one, and let you use that as a tool for making sense of the literature.
+
+
+Requirements
+------------
+
+- Neo4j graph server - developed using 2.0.0
+- Python (developed with 2.7) and `virtualenv` for best results.
+
+Setup
+-----
+
+Recommended to use `virtualenv` and `pip` but if you like global installs go for it.
+
+To create the virtualenv:
+
+```
+$ virtualenv vpython
+$ source vpython/bin/activate
+$ pip install -f requirements.txt
+```
+
+In the future, for development, etc. you just need to `source vpython/bin/activate`
+
+
+
+
